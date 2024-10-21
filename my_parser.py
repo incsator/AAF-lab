@@ -8,7 +8,7 @@ def valid_name(name):
         return False
 
 def parse_create_table(query):
-    create_table_pattern = re.compile(r"CREATE\s+(\w+)\s*\(\s*(.*?)\s*\)\s*;", re.IGNORECASE | re.DOTALL)
+    create_table_pattern = re.compile(r"CREATE\s+(\w+)\s*\(\s*(\w+(?:\s+INDEXED)?(?:\s*,\s*\w+(?:\s+INDEXED)?)*?)\s*\)\s*;", re.IGNORECASE | re.DOTALL)
 
     match = create_table_pattern.match(query)
     if match:
@@ -45,7 +45,7 @@ def parse_create_table(query):
     return None
 
 def parse_insert(query):
-    insert_pattern = re.compile(r"INSERT\s+(INTO\s*)?(\w+)\s*\((.*?)\)\s*;", re.IGNORECASE | re.DOTALL)
+    insert_pattern = re.compile(r"INSERT\s+(INTO\s*)?(\w+)\s*\(\s*(\w+(?:\s*,\s*\w+)*)\s*\)\s*;", re.IGNORECASE | re.DOTALL)
     query = query.replace("“", '').replace("”", '').replace('"', '')
 
     match = insert_pattern.match(query.strip())
@@ -141,3 +141,4 @@ def parsed_command(comnd):
     
     print('=' * 50)
     print()
+
