@@ -45,22 +45,26 @@ def parse_create_table(query):
     return None
 
 def parse_insert(query):
-    insert_pattern = re.compile(r"INSERT\s+(INTO\s*)?(\w+)\s*\(\s*(\w+(?:\s*,\s*\w+)*)\s*\)\s*;", re.IGNORECASE | re.DOTALL)
-    query = query.replace("“", '').replace("”", '').replace('"', '')
+    insert_pattern = re.compile(r"INSERT\s+(INTO\s*)?(\w+)\s*\((.*?)\)\s*;", re.IGNORECASE | re.DOTALL)
+    query = query.replace("“", '"').replace("”", '"')
 
     match = insert_pattern.match(query.strip())
 
     if match:
-        table_name = match.group(2) 
-        values = match.group(3).strip() 
-        values_list = [val.strip() for val in re.split(r'\s*,\s*', values)]
-
         action = "INSERT INTO" if match.group(1) else "INSERT"
+        table_name = match.group(2) 
+        values1 = match.group(3).strip() 
+
+        values1 = values1.replace("  ", " ").strip()
+        pattern = r'"([^"]+)"(?:\s*,\s*|\s*$)'
+        if not re.match(r'^\s*"[^"]*"(?:\s*,\s*"[^"]*")*\s*$', values1):
+            return "error: invalid syntax (missing quotes or commas)"
+        values = re.findall(pattern, values1)
 
         return {
             "action": action,
             "table": table_name,
-            "values": values_list
+            "values": values
         }
     return None
 
@@ -141,4 +145,3 @@ def parsed_command(comnd):
     
     print('=' * 50)
     print()
-
