@@ -65,36 +65,48 @@ def parse_insert(query):
     return None
 
 def parse_select(query):
-    select_pattern = re.compile(r"SELECT\s+FROM\s+(\w+)\s*(?:WHERE\s+(.*?))?(?:\s+JOIN\s+(\w+)\s+ON\s+(\w+)\s*=\s*(\w+))?\s*;", re.IGNORECASE | re.DOTALL)
+    select_pattern = re.compile(
+        r"SELECT\s+FROM\s+(\w+)"                                
+        r"(?:\s+JOIN\s+(\w+)(?:\s+ON\s+(\w+)\s*=\s*(\w+))?)?"   
+        r"(?:\s+WHERE\s+(.+))?"                                 
+        r"\s*;", re.IGNORECASE | re.DOTALL
+    )
+
     query = query.replace("“", '"').replace("”", '"')
 
     match = select_pattern.match(query.strip())
     if match:
-        table_name = match.group(1)
-        where_cond = match.group(2) if match.group(2) else None
-        if where_cond != None:
+        table_name_1 = match.group(1)
+        join_table = match.group(2)    
+        t1_column = match.group(3)     
+        t2_column = match.group(4)     
+        where_cond = match.group(5)  
+
+        result = {
+            "action": "SELECT",
+            "table": table_name_1,
+            "join": None,
+            "where": None
+        }
+
+        if join_table:
+            result["join"] = {
+                "table": join_table,
+                "on": (t1_column, t2_column) if t1_column and t2_column else None
+            }
+
+        if where_cond:
             cond = re.compile(r'(\w+)\s*(>=|<=|!=|>|<|=)\s*\"([^\"]+)\"')
             check_cond = cond.match(where_cond)
             if not check_cond:
                 return "Invalid condition format or missing quotes"
             else:
                 column_name, operation, value = check_cond.groups()
+                result["where"] = [column_name, operation, value]
 
-        join_table = match.group(3) if match.group(3) else None
-        join_condition = (match.group(4), match.group(5)) if match.group(4) and match.group(5) else None
-
-        return {
-            "action": "SELECT",
-            "table": table_name,
-            "where": [column_name, operation, value],
-            "join": {
-                "table": join_table,
-                "condition": join_condition
-            } if join_table else None
-        }
-
+        return result
     return None
-
+ 
 def parse_sql(query):
     query = query.strip()
 
