@@ -28,8 +28,8 @@ def parse_create_table(query):
             column_name = col_parts[0]
             if not valid_name(column_name):
                 invalid_names.append(column_name)
-            if invalid_names:
-               return invalid_names
+        if invalid_names:
+            return invalid_names
 
             if len(col_parts) > 1 and col_parts[1].upper() == 'INDEXED':
                 indexed_columns.append(column_name)
