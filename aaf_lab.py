@@ -1,3 +1,4 @@
+#!/usr/bin/python3
 from rich.console import Console
 from rich.panel import Panel
 from rich.prompt import Prompt
@@ -8,7 +9,7 @@ from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.sql import SqlLexer
 from prompt_toolkit.key_binding import KeyBindings
 import my_parser 
-
+import my_data_structure
 
 console = Console()
 session = PromptSession(history=InMemoryHistory(), lexer=PygmentsLexer(SqlLexer))
@@ -33,22 +34,29 @@ def input_handle():
 def input_command():
     console.print("[bold green]Input your command: [/bold green]")
     comnd = input_handle()
-    my_parser.parsed_command(comnd)
+
+    # print(my_parser.parse_sql(comnd))
+
+    parsed = my_parser.parse_sql(comnd)
+
+    if isinstance(parsed, dict):
+        if parsed['action'] == 'CREATE':
+            my_data_structure.create(parsed)
+        elif parsed['action'] == 'INSERT':
+            my_data_structure.insert(parsed)
+        elif parsed['action'] == 'SELECT':
+            my_data_structure.select(parsed)
+
+    elif isinstance(parsed, list):
+        print('Found invalid names:')
+        for value in parsed:
+            print(value)            
+    else:
+        print(parsed)
 
 def show_tables():
     console.print("[bold green]Showing table...[/bold green]")
-    print('''
-    Here will be displayed tables like that 
-    (in the next versions of this app)
-
-        +---------+---------------+-----------+-----------+-------------+------------+
-        | cat_id  | cat_owner_id  | cat_name  | owner_id  | owner_name  | owner_age  |
-        +---------+---------------+-----------+-----------+-------------+------------+
-        |   10    |       1       |  Murzik   |     1     |    Vasya    |     30     |
-        |   20    |       1       |  Pushok   |     1     |    Vasya    |     30     |
-        +---------+---------------+-----------+-----------+-------------+------------+
-
-     ''')
+    my_data_structure.print_tables()
 
 def exit_menu():
     console.print("[bold red]Exiting...[/bold red]")
