@@ -1,0 +1,77 @@
+[
+    {
+        "table": "Students",
+        "s_name": [
+            "Elizaveta",
+            "Mykola",
+            "Taras",
+            "Ivan",
+            "Victoria",
+            "Pavlo"
+        ],
+        "s_group": [
+            "FB-25",
+            "FB-25",
+            "FB-07",
+            "FI-28",
+            "FB-32",
+            "FB-15",
+            "19"
+        ],
+        "age": [
+            "19",
+            "20",
+            "23",
+            "20",
+            "19",
+            "23"
+        ],
+        "city": [
+            "Donetsk",
+            "Kyiv",
+            "Lviv",
+            "Kyiv",
+            "Donetsk",
+            "Kharkiv"
+        ]
+    },
+    {
+        "table": "Points",
+        "p_name": [
+            "Victoria",
+            "Mykola",
+            "Victoria",
+            "Victoria",
+            "Elizaveta",
+            "Elizaveta",
+            "Mykola"
+        ],
+        "p_group": [
+            "FB-32",
+            "FB-25",
+            "FB-32",
+            "FB-32",
+            "FB-25",
+            "FB-25",
+            "FB-25"
+        ],
+        "subject": [
+            "ACS",
+            "English",
+            "web-prog",
+            "Logic",
+            "English",
+            "Crypto",
+            "Crypto"
+        ],
+        "points": [
+            "99",
+            "90",
+            "60",
+            "35",
+            "80",
+            "65",
+            "50"
+        ]
+    }
+]

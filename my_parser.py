@@ -28,14 +28,13 @@ def parse_create_table(query):
             column_name = col_parts[0]
             if not valid_name(column_name):
                 invalid_names.append(column_name)
-                
+
             if len(col_parts) > 1 and col_parts[1].upper() == 'INDEXED':
                 indexed_columns.append(column_name)
             parsed_columns.append(column_name)
 
         if invalid_names:
-            return invalid_names
-            
+           return invalid_names
         return {
             "action": "CREATE",
             "table": table_name,
@@ -51,7 +50,7 @@ def parse_insert(query):
     match = insert_pattern.match(query.strip())
 
     if match:
-        action = "INSERT INTO" if match.group(1) else "INSERT"
+        action = "INSERT" if match.group(1) else "INSERT"
         table_name = match.group(2) 
         values1 = match.group(3).strip() 
 
@@ -110,7 +109,7 @@ def parse_select(query):
 
         return result
     return None
- 
+
 def parse_sql(query):
     query = query.strip()
 
