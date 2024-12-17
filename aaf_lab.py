@@ -9,7 +9,7 @@ from prompt_toolkit.lexers import PygmentsLexer
 from pygments.lexers.sql import SqlLexer
 from prompt_toolkit.key_binding import KeyBindings
 import my_parser 
-import my_data_structure
+import b_my_data_structure
 
 console = Console()
 session = PromptSession(history=InMemoryHistory(), lexer=PygmentsLexer(SqlLexer))
@@ -41,11 +41,11 @@ def input_command():
 
     if isinstance(parsed, dict):
         if parsed['action'] == 'CREATE':
-            my_data_structure.create(parsed)
+            b_my_data_structure.create(parsed)
         elif parsed['action'] == 'INSERT':
-            my_data_structure.insert(parsed)
+            b_my_data_structure.insert(parsed)
         elif parsed['action'] == 'SELECT':
-            my_data_structure.select(parsed)
+            b_my_data_structure.select(parsed)
 
     elif isinstance(parsed, list):
         print('Found invalid names:')
@@ -56,7 +56,7 @@ def input_command():
 
 def show_tables():
     console.print("[bold green]Showing table...[/bold green]")
-    my_data_structure.print_tables()
+    b_my_data_structure.print_tables()
 
 def exit_menu():
     console.print("[bold red]Exiting...[/bold red]")
